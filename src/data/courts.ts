@@ -37,7 +37,7 @@ export const COURTS: Court[] = [
     {
         city: '台北市 | Taipei City',
         title: '台北壁球中心 | Taipei Squash Center',
-        address: '台北市松山區民生東路五段171號海華大廈號 B2',
+        address: '台北市松山區民生東路五段171號海華大廈 B2',
         phone: '(02) 2768-0871',
     },
     {
