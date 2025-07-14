@@ -1,0 +1,13 @@
+{
+    "editor.insertSpaces": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "eslint.codeActionsOnSave.mode": "all",
+    "eslint.format.enable": true,
+    "eslint.validate": [
+        "vue",
+        "javascript",
+        "typescript",
+    ]
+}
