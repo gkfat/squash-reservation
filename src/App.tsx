@@ -12,9 +12,10 @@ function App() {
     const [text, setText] = useState('');
 
     const courts = COURTS.filter((court) => {
-        return court.address.includes(text)
-          || court.city.includes(text)
-          || court.title.includes(text);
+        const targetValue = text.toLocaleLowerCase();
+        return court.address.toLocaleLowerCase().includes(targetValue)
+          || court.city.toLocaleLowerCase().includes(targetValue)
+          || court.title.toLocaleLowerCase().includes(targetValue);
     });
 
     const onSearchChange = (v: string) => {
@@ -46,7 +47,7 @@ function App() {
                     </Stack>
 
                 </Container>
-                
+
                 <Author />
             </Paper>
         </>
