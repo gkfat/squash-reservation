@@ -13,7 +13,7 @@ export function Author() {
                 sx={{ pb: 2 }}
             >
                 <Typography color="#ffffff">
-                      Contributed by GK
+                      Powered by GK
                 </Typography>
             </Stack>
         </>
