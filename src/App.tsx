@@ -1,57 +1,89 @@
 import {
-    Container, Paper, Stack, 
+    Box,
+    Container, Paper, 
 } from '@mui/material';
-import { Card } from './components/Card';
 import { Header } from './components/Header';
-import { COURTS } from './data/courts';
-import { SearchBar } from './components/SearchBar';
-import { useState } from 'react';
+import {
+    useEffect, useRef, useState, 
+} from 'react';
 import { Author } from './components/Author';
+import { City } from './enums/city';
+import { FloatingMenu } from './components/FloatingMenu';
+import { CityBlock } from './components/CityBlock';
 
-function App() {
-    const [text, setText] = useState('');
+export function App() {
+    const [selectedCity, setSelectedCity] = useState<City>();
+    const [visibleCity, setVisibleCity] = useState<City>();
+    const cities = Object.values(City);
 
-    const courts = COURTS.filter((court) => {
-        const targetValue = text.toLocaleLowerCase();
-        return court.address.toLocaleLowerCase().includes(targetValue)
-          || court.city.toLocaleLowerCase().includes(targetValue)
-          || court.title.toLocaleLowerCase().includes(targetValue);
-    });
+    const courtRefs = useRef<Record<string, HTMLElement | null>>({});
 
-    const onSearchChange = (v: string) => {
-        setText(v);
-    };
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        const city = entry.target.getAttribute('data-city');
+                        if (city) setVisibleCity(city as City);
+                        break;
+                    }
+                }
+            },
+            { threshold: 0.1 },
+        );
+
+        Object.values(courtRefs.current).forEach((el) => {
+            if (el) observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (selectedCity) {
+            const el = courtRefs.current[selectedCity];
+            if (el) {
+                el.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start', 
+                });
+            }
+        }
+    }, [selectedCity]);
   
     return (
-        <>
-            <Paper
-                sx={{
-                    width: '100vw',
-                    height: '100vh',
-                    overflowY: 'scroll',
-                    backgroundColor: '#808873', 
-                }}
-            >
-                <Container sx={{ paddingBottom: '60px' }}>
+        <Paper
+            sx={{
+                width: '100vw',
+                height: '100vh',
+                overflowY: 'scroll',
+                backgroundColor: '#808873', 
+            }}
+        >
+            <Container sx={{ paddingBottom: '60px' }}>
+                <Box sx={{ mb: 5 }}>
                     <Header />
+                </Box>
 
-                    <SearchBar onChange={onSearchChange} />
-
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        flexWrap="wrap"
+                {cities.map((c) => (
+                    <Box
+                        key={c}
+                        ref={(el) => courtRefs.current[c] = el}
+                        data-city={c}
+                        sx={{ mb: 15 }}
                     >
-                        {courts.map((court) => <Card court={court} />)}
-                    </Stack>
+                        <CityBlock city={c} />
+                    </Box>   
+                ))}
+            </Container>
 
-                </Container>
+            <Author />
 
-                <Author />
-            </Paper>
-        </>
+            <FloatingMenu
+                activeCity={visibleCity}
+                onSelect={(city) => setSelectedCity(city)}
+            />
+        </Paper>
     );
 }
 
-export default App;
