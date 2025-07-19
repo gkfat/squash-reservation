@@ -1,15 +1,16 @@
 import {
     City, CityLangMapping, 
 } from '../enums/city';
-import type { Court } from '../types/court';
 import {
-    Card as MuiCard, type CardProps, styled,
+    Card as MuiCard,
+    styled,
     Typography,
     Button,
     Box,
     Stack,
     CardActions, 
 } from '@mui/material';
+import type { Court } from '../types/court';
 
 const StyledCard = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -34,30 +35,27 @@ function WebLink(link: string) {
     };
 
     return (
-        <>
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{ width: '100%' }}
+        <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ width: '100%' }}
+        >
+            <Typography>網路預約 | Web Reservation</Typography>
+            <Button
+                variant="contained"
+                onClick={openLink}
+                sx={{ textTransform: 'none' }}
             >
-                <Typography>網路預約 | Web Reservation</Typography>
-                <Button
-                    variant="contained"
-                    onClick={openLink}
-                    sx={{ textTransform: 'none' }}
-                >
                     Link
-                </Button>
-            </Stack>
-        </>
+            </Button>
+        </Stack>
     );
 }
 
 interface Props {
     city: City;
     court: Court;
-    extendProps?: CardProps;
 }
 
 export function Card(props: Props) {
@@ -74,7 +72,6 @@ export function Card(props: Props) {
                 p: 2,
                 pb: 3, 
             }}
-            {...props.extendProps}
         >
             <Box>
                 <Typography
